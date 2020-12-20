@@ -6,6 +6,9 @@ use Metabox\RegistrationMetaBox;
 require_once(DIR_PATH . '/class-metabox/class-registration-metabox.php');
 require_once(DIR_PATH . '/class-metabox/class-save-metabox.php');
 
+use Metabox\Popularity_Metabox;
+require_once(DIR_PATH . '/class-metabox/class-popularity-metabox.php');
+
 if (!defined('_S_VERSION')) {
     // Replace the version number of the theme on each release.
     define('_S_VERSION', '1.0.0');
@@ -166,38 +169,10 @@ add_action('init', 'film_setup_post_type');
 
 /**
  * Register meta box(es).
- */
-
-new RegistrationMetaBox('popularity_meta_box_id',__('Popularity', 'textdomain'), 'wp_course_render_popularity_meta_boxes', 'film','side');
-
-function wp_course_render_popularity_meta_boxes($post)
-{
-    $popular = get_post_meta($post->ID, 'popularity', true);
-    ?>
-
-    <p>
-        <label for="popularity-select"><?php _e('Select popularity of type') ?></label>
-        <select name="popularity" id="popularity-select">
-            <option value="high">       <?php _e('High') ?>     </option>
-            <option value="average">    <?php _e('Average') ?>  </option>
-            <option value="low">        <?php _e('Low') ?>      </option>
-        </select>
-    </p>
-    <hr>
-    <label for="popularity"><?php _e('Popularity') ?></label>
-    <input type="text" name="difficulty_type" id="popularity" value="<?= ucfirst($popular); ?>" disabled>
-    <?php
-}
-
-/**
  * Save meta box content.
- *
- * @param int $post_id Post ID
  */
 
-new SaveMetaBox('popularity');
-
-
+new Popularity_Metabox('popularity_meta_box_id',__('Popularity', 'textdomain'), 'film','side');
 
 /**
  * Register taxonomy(ies).
