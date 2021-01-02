@@ -1,13 +1,26 @@
 <?php
 define('DIR_PATH', plugin_dir_path(__FILE__));
 
-use Metabox\SaveMetaBox;
-use Metabox\RegistrationMetaBox;
-require_once(DIR_PATH . '/class-metabox/class-registration-metabox.php');
-require_once(DIR_PATH . '/class-metabox/class-save-metabox.php');
+use Metabox\Genre_Metabox;
+use Metabox\Poster_Metabox;
+use Metabox\Budget_Metabox;
+use Metabox\Original_Title_Metabox;
+use Metabox\Country_Metabox;
+use Metabox\Release_Metabox;
+use Metabox\Revenue_Metabox;
+use Metabox\Runtime_Metabox;
+use Metabox\Overview_Metabox;
 
-use Metabox\Popularity_Metabox;
-require_once(DIR_PATH . '/class-metabox/class-popularity-metabox.php');
+require_once(DIR_PATH . '/class-metabox/class-poster-path-metabox.php');
+require_once(DIR_PATH . '/class-metabox/class-budget-metabox.php');
+require_once(DIR_PATH . '/class-metabox/class-country-metabox.php');
+require_once(DIR_PATH . '/class-metabox/class-original-title-metabox.php');
+require_once(DIR_PATH . '/class-metabox/class-release-metabox.php');
+require_once(DIR_PATH . '/class-metabox/class-revenue-metabox.php');
+require_once(DIR_PATH . '/class-metabox/class-runtime-metabox.php');
+require_once(DIR_PATH . '/class-metabox/class-overview-metabox.php');
+require_once(DIR_PATH . '/class-metabox/class-genre-metabox.php');
+
 
 if (!defined('_S_VERSION')) {
     // Replace the version number of the theme on each release.
@@ -171,8 +184,16 @@ add_action('init', 'film_setup_post_type');
  * Register meta box(es).
  * Save meta box content.
  */
+new Genre_Metabox('genre_meta_box_id',              __('Genre', 'textdomain'),         'film');
+new Original_Title_Metabox('orig_title_meta_box_id',__('Original title', 'textdomain'),'film');
+new Poster_Metabox('poster_path_meta_box_id',       __('Poster path', 'textdomain'),   'film');
+new Release_Metabox('release_meta_box_id',          __('Release', 'textdomain'),       'film');
+new Revenue_Metabox('revenue_meta_box_id',          __('Revenue', 'textdomain'),       'film');
+new Budget_Metabox('budget_meta_box_id',            __('Budget', 'textdomain'),        'film','side');
+new Country_Metabox('country_meta_box_id',          __('Country', 'textdomain'),       'film','side');
+new Runtime_Metabox('runtime_meta_box_id',          __('Runtime', 'textdomain'),       'film','side');
+new Overview_Metabox('overview_meta_box_id',        __('Overview', 'textdomain'),      'film','side');
 
-new Popularity_Metabox('popularity_meta_box_id',__('Popularity', 'textdomain'), 'film','side');
 
 /**
  * Register taxonomy(ies).

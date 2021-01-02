@@ -3,7 +3,7 @@
     <main id="primary_page" class="site-main">
         <div class="posts">
             <?php
-            do_shortcode('[slider numberposts = 3 post_type = swim]');
+            do_shortcode('[slider numberposts = 3 post_type = film]');
             ?>
         </div>
 
