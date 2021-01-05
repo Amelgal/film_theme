@@ -10,8 +10,8 @@
 
             the_post_navigation(
                 array(
-                    'prev_text' => '<span class="nav-subtitle">' . esc_html__('Previous:', 'wp_course') . '</span> <span class="nav-title">%title</span>',
-                    'next_text' => '<span class="nav-subtitle">' . esc_html__('Next:', 'wp_course') . '</span> <span class="nav-title">%title</span>',
+                    'prev_text' => '<span class="nav-subtitle">' . esc_html__('Previous:', 'film_theme') . '</span> <span class="nav-title">%title</span>',
+                    'next_text' => '<span class="nav-subtitle">' . esc_html__('Next:', 'film_theme') . '</span> <span class="nav-title">%title</span>',
                 )
             );
 

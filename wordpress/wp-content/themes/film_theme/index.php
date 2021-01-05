@@ -4,6 +4,7 @@
         <div class="posts">
             <?php
             do_shortcode('[slider numberposts = 3 post_type = film]');
+            var_dump(get_option( 'cron' ));
             ?>
         </div>
 
