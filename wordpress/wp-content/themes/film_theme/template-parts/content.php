@@ -11,14 +11,14 @@
 			?>
 			<div class="entry-meta">
 				<?php
-				wp_course_posted_on();
-				wp_course_posted_by();
+                film_theme_posted_on();
+                film_theme_posted_by();
 				?>
 			</div><!-- .entry-meta -->
 		<?php endif; ?>
 	</header><!-- .entry-header -->
 
-	<?php wp_course_post_thumbnail(); ?>
+	<?php film_theme_post_thumbnail(); ?>
 
 	<div class="entry-content">
         <?php
@@ -27,7 +27,7 @@
 			sprintf(
 				wp_kses(
 					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'wp_course' ),
+					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'film_theme' ),
 					array(
 						'span' => array(
 							'class' => array(),
@@ -40,7 +40,7 @@
 
 		wp_link_pages(
 			array(
-				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'wp_course' ),
+				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'film_theme' ),
 				'after'  => '</div>',
 			)
 		);
@@ -53,6 +53,6 @@
 	</div><!-- .entry-content -->
 
 	<footer class="entry-footer">
-		<?php wp_course_entry_footer(); ?>
+		<?php film_theme_entry_footer(); ?>
 	</footer><!-- .entry-footer -->
 </article><!-- #post-<?php the_ID(); ?> -->
