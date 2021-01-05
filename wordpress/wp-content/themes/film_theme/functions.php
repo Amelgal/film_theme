@@ -314,28 +314,152 @@ function slider_func(array $atts) {
 
 add_shortcode('slider', 'slider_func');
 
-//add_filter ('get_archives_link',
-//    function ($link_html, $url, $text, $format) {
-//        switch ($format){
-//            case 'swim':
-//                var_dump($link_html);
-//                var_dump($text);
-//                var_dump($format);
-//                $link_html = "<li><a href='$url'>"
-//                    . "<span class='plus'>+</span> Trip $text"
-//                    . '</a></li>';
-//                break;
-//            default:
-//                echo "ERROR";
-//                break;
-//        }
-//        return $link_html;
-//    }, 10, 6);
+
+add_action('admin_menu', 'mt_add_pages');
+// action function for above hook
+function mt_add_pages() {
+  add_menu_page('API', 'API config', 8, __FILE__, 'mt_toplevel_page');
+}
+
+function mt_toplevel_page() {
+
+  $api_key = 'api_options';
+  $hidden_field_name = 'api_options_hidden';
+  $data_key_name = 'api_options_content';
+
+  $api_val = get_option($api_key);
+
+  if ($_POST[$hidden_field_name] == 'Y') {
+    $api_val = $_POST[$data_key_name];
+    update_option($api_key, $api_val);
+    ?>
+      <div class="updated"><p>
+              <strong><?php _e('Options saved.', 'mt_trans_domain'); ?></strong>
+          </p></div>
+    <?php
+  }
+  ?>
+    <div class="wrap">
+        <h2><?= __('Menu Test Plugin Options', 'mt_trans_domain') ?></h2>
+        <form name="form1" method="post"
+              action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+
+            <input type="hidden" name="<?php echo $hidden_field_name; ?>"
+                   value="Y">
+
+            <p><?php _e("API key:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_key_name; ?>"
+                       value="<?php echo $api_val; ?>" size="30">
+            </p>
+            <hr/>
+            <p class="submit">
+                <input type="submit" name="Submit"
+                       value="<?php _e('Update Options', 'mt_trans_domain') ?>"/>
+            </p>
+        </form>
+    </div>
+  <?php
+}
+
+add_action('admin_menu', 'api_request_register_admin_page');
+function api_request_register_admin_page() {
+  add_submenu_page(
+    'edit.php?post_type=film',
+    'API request',
+    'Add new film',
+    'manage_categories',
+    'api-request',
+    'api_request_render_admin_page'
+  );
+}
+
+function api_request_render_admin_page() {
+  $film_title = 'film_title';
+  $year = 'year';
+
+  $hidden_field_name = 'film_request_hidden';
+
+  $data_film_title = 'film_request_content';
+  $data_year = 'year_content';
+
+
+  $film_val = get_option($film_title);
+  $year_val = get_option($year);
+
+  if ($_POST[$hidden_field_name] == 'Y') {
+    $film_val = $_POST[$data_film_title];
+    $year_val = $_POST[$data_year];
+    update_option($film_title, $film_val);
+    update_option($year, $year_val);
+    $url = "http://ec2-18-219-233-220.us-east-2.compute.amazonaws.com/wpr/wp-json/mw/v1/movies?page=" . $film_val . "&per_page=". $year_val ."";
+    // Создаём запрос
+    $ch = curl_init();
+    // Настройка запроса
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    // Отправляем запрос и получаем ответ
+    $data = json_decode(curl_exec($ch));
+    // Закрываем запрос
+    curl_close($ch);
+    //var_dump($data);
+    $data = (array) $data;
+    //var_dump($data);
+    ?>
+      <div class="updated"><p>
+              <strong><?php _e('Request sent.', 'mt_trans_domain'); ?></strong>
+          </p></div>
+    <?php
+  }
+  ?>
+    <div class="wrap">
+        <h2><?= __('Request to add a new movie to the list', 'mt_trans_domain') ?></h2>
+        <form name="form1" method="post"
+              action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+
+            <input type="hidden" name="<?php echo "$hidden_field_name"; ?>"
+                   value="Y">
+
+            <p><?php _e("Film key:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_film_title; ?>"
+                       value="<?php echo $film_val; ?>" size="30">
+            </p>
+            <p><?php _e("Year:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_year; ?>" value="<?php echo $year_val; ?>" size="30">
+            </p>
+            <hr/>
+            <p class="submit">
+                <input type="submit" name="Submit"
+                       value="<?php _e('Update Options', 'mt_trans_domain') ?>"/>
+            </p>
+        </form>
+    </div>
+    <div class="clear"></div>
+  <?php
+}
+
+
+/*add_filter ('get_archives_link',
+    function ($link_html, $url, $text, $format) {
+        switch ($format){
+            case 'swim':
+                var_dump($link_html);
+                var_dump($text);
+                var_dump($format);
+                $link_html = "<li><a href='$url'>"
+                    . "<span class='plus'>+</span> Trip $text"
+                    . '</a></li>';
+                break;
+            default:
+                echo "ERROR";
+                break;
+        }
+        return $link_html;
+    }, 10, 6);*/
 
 
 // добавляет новую крон задачу
 
-add_action( 'admin_head', 'film_cron' );
+add_action('admin_head', 'film_cron');
 function film_cron() {
   if (!wp_next_scheduled('daily_event')) {
     wp_schedule_event(time(), 'daily', 'daily_event');
@@ -343,7 +467,7 @@ function film_cron() {
 }
 
 // добавляем функцию к указанному хуку
-add_action( 'daily_event', 'save_bd' );
+add_action('daily_event', 'save_bd');
 function save_bd() {
   $stack = [];
   $param = (require(DIR_PATH . '/param/genres_config.php'));
@@ -365,7 +489,7 @@ function save_bd() {
     //var_dump($data);
     $data = (array) $data;
     for ($pos = 0; $pos < 100; $pos++) {
-      $stack=[];
+      $stack = [];
       foreach ($data['result'][$pos] as $key => $item) {
         switch ($key) {
           case 'title':

@@ -2,10 +2,11 @@
 
     <main id="primary_page" class="site-main">
         <div class="posts">
-            <?php
-            do_shortcode('[slider numberposts = 3 post_type = film]');
-            var_dump(get_option( 'cron' ));
-            ?>
+          <?php
+          do_shortcode('[slider numberposts = 3 post_type = film]');
+          var_dump(get_option('cron'));
+          var_dump(get_option('api_options'));
+          ?>
         </div>
 
     </main><!-- #main -->
