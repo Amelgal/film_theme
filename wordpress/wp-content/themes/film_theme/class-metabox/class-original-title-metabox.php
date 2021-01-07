@@ -15,15 +15,6 @@ class Original_Title_Metabox extends Base_Meta
     $orig_title = get_post_meta($post->ID, 'orig_title', true);
 
     ?>
-    <p>
-      <label for="orig_title-select"><?php _e('Select orig_title of type') ?></label>
-      <select name="orig_title" id="orig_title-select">
-        <option value="high">       <?php _e('High') ?>     </option>
-        <option value="average">    <?php _e('Average') ?>  </option>
-        <option value="low">        <?php _e('Low') ?>      </option>
-      </select>
-    </p>
-    <hr>
     <label for="orig_title"><?php _e('orig_title') ?></label>
     <input type="text" name="orig_title" id="orig_title" value="<?= ucfirst($orig_title); ?>" disabled>
     <?php

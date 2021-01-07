@@ -374,19 +374,29 @@ function api_request_register_admin_page() {
 }
 
 function api_request_render_admin_page() {
+  /*
+   $film_title = 'title';
+   $original_film_title = 'original_title';
+   $genres = 'genres';
+   $poster_path = 'poster_path';
+   $release = 'release_date';
+   $revenue = 'revenue';
+   $runtime = 'runtime';
+   $production_countries = 'production_countries';
+   $budget = 'budget';
+   $overview = 'overview';
 
-
-  /*$film_title = 'title';
-  $original_film_title = 'original_title';
-  $genres = 'genres';
-  $poster_path = 'poster_path';
-  $release = 'release_date';
-  $revenue = 'revenue';
-  $runtime = 'runtime';
-  $production_countries = 'production_countries';
-  $budget = 'budget';
-  $overview = 'overview';*/
-
+   $film_title_val = get_option($film_title);
+   $original_film_title_val = get_option($original_film_title);
+   $genres_val = get_option($genres);
+   $poster_path_val = get_option($poster_path);
+   $release_val = get_option($release);
+   $revenue_val = get_option($revenue);
+   $runtime_val = get_option($runtime);
+   $production_countries_val = get_option($production_countries);
+   $budget_val = get_option($budget);
+   $overview_val = get_option($overview);
+ */
 
   $hidden_field_name = 'film_request_hidden';
 
@@ -400,17 +410,6 @@ function api_request_render_admin_page() {
   $data_production_countries = 'production_countries';
   $data_budget = 'budget';
   $data_overview = 'overview';
-
-  /*$film_title_val = get_option($film_title);
-  $original_film_title_val = get_option($original_film_title);
-  $genres_val = get_option($genres);
-  $poster_path_val = get_option($poster_path);
-  $release_val = get_option($release);
-  $revenue_val = get_option($revenue);
-  $runtime_val = get_option($runtime);
-  $production_countries_val = get_option($production_countries);
-  $budget_val = get_option($budget);
-  $overview_val = get_option($overview);*/
 
   $api_val = get_option('api_options');
 
@@ -427,8 +426,8 @@ function api_request_render_admin_page() {
     $budget_val = $_POST[$data_budget];
     $overview_val = $_POST[$data_overview];
 
-
-    /*update_option($film_title, $film_title_val);
+    /*
+    update_option($film_title, $film_title_val);
     update_option($original_film_title, $original_film_title_val);
     update_option($genres, $genres_val);
     update_option($poster_path, $poster_path_val);
@@ -437,8 +436,8 @@ function api_request_render_admin_page() {
     update_option($runtime, $runtime_val);
     update_option($production_countries, $production_countries_val);
     update_option($budget, $budget_val);
-    update_option($overview, $overview_val);*/
-
+    update_option($overview, $overview_val);
+    */
 
     $api_response = wp_remote_post('http://movie-world.top/wp-json/wp/v2/movie', [
       'headers' => [
@@ -459,24 +458,24 @@ function api_request_render_admin_page() {
       ],
     ]);
 
-        if (wp_remote_retrieve_response_message($api_response) === 'Created') {
-          ?>
-              <div class="updated">
-                  <p>
-                      <strong><?php _e('Request sent.', 'mt_trans_domain'); ?></strong>
-                  </p>
-              </div>
-            <?php
-        }
-        else {
-    ?>
-      <div class="updated">
-          <p>
-              <strong><?php _e('Error.', 'mt_trans_domain'); ?></strong>
-          </p>
-      </div>
-    <?php
-      }
+    if (wp_remote_retrieve_response_message($api_response) === 'Created') {
+      ?>
+        <div class="updated">
+            <p>
+                <strong><?php _e('Request sent.', 'mt_trans_domain'); ?></strong>
+            </p>
+        </div>
+      <?php
+    }
+    else {
+      ?>
+        <div class="updated">
+            <p>
+                <strong><?php _e('Error.', 'mt_trans_domain'); ?></strong>
+            </p>
+        </div>
+      <?php
+    }
   }
 
   ?>
@@ -536,7 +535,8 @@ function api_request_render_admin_page() {
             <p class="submit">
                 <input type="submit" name="Submit"
                        value="<?php _e('Sent request', 'mt_trans_domain') ?>"/>
-                <input type="reset" value="<?php _e('Reset', 'mt_trans_domain') ?>">
+                <input type="reset"
+                       value="<?php _e('Reset', 'mt_trans_domain') ?>">
             </p>
         </form>
     </div>

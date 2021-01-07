@@ -15,15 +15,6 @@ class Genre_Metabox extends Base_Meta
     $genre = get_post_meta($post->ID, 'genre', true);
 
     ?>
-    <p>
-      <label for="genre-select"><?php _e('Select genre') ?></label>
-      <select name="genre" id="genre-select">
-        <option value="high">       <?php _e('High') ?>     </option>
-        <option value="average">    <?php _e('Average') ?>  </option>
-        <option value="low">        <?php _e('Low') ?>      </option>
-      </select>
-    </p>
-    <hr>
     <label for="genre"><?php _e('budget') ?></label>
     <input type="text" name="genre" id="genre" value="<?= ucfirst($genre); ?>" disabled>
     <?php
