@@ -61,6 +61,7 @@ if (!function_exists('wp_course_setup')) :
         register_nav_menus(
             array(
                 'menu-1' => esc_html__('Primary', 'wp_course'),
+                'menu-header' => esc_html__('Header-Menu', 'wp_course'),
             )
         );
 
@@ -78,6 +79,7 @@ if (!function_exists('wp_course_setup')) :
                 'caption',
                 'style',
                 'script',
+
             )
         );
 
@@ -141,10 +143,18 @@ function wp_course_scripts()
     wp_enqueue_style('wp_course-style', get_stylesheet_uri(), array(), _S_VERSION);
     wp_enqueue_style('normalize', get_template_directory_uri() . '/assets/css/normalize.css', array("wp_course-style"), _S_VERSION);
     wp_enqueue_style('wp_course-main-style', get_template_directory_uri() . '/assets/css/style.css', array("wp_course-style"), _S_VERSION);
+    // wp_enqueue_style('bootstrap-main', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap.min.css');
+    wp_enqueue_style('bootstrap-grid', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap-grid.min.css');
+    // wp_enqueue_style('bootstrap-reboot', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap-reboot.min.css');
 
     wp_style_add_data('wp_course-style', 'rtl', 'replace');
 
+    // Add fonts
+    wp_enqueue_style('font-connection', get_template_directory_uri() . '/assets/css/font-connection.css');
+
     wp_enqueue_script('wp_course-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true);
+    wp_enqueue_script('bootstrap-main', get_template_directory_uri() . '/assets/bootstrap-4.3.1/js/bootstrap.min.js', array(), _S_VERSION, true);
+    wp_enqueue_script('bootstrap-bundle', get_template_directory_uri() . '/assets/bootstrap-4.3.1/js/bootstrap.bundle.min.js', array(), _S_VERSION, true);
 
     if (is_singular() && comments_open() && get_option('thread_comments')) {
         wp_enqueue_script('comment-reply');
