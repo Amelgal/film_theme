@@ -340,7 +340,7 @@ function mt_toplevel_page() {
   }
   ?>
     <div class="wrap">
-        <h2><?= __('Menu Test Plugin Options', 'mt_trans_domain') ?></h2>
+        <h2><?= __('API Options', 'mt_trans_domain') ?></h2>
         <form name="form1" method="post"
               action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">
 
@@ -349,7 +349,7 @@ function mt_toplevel_page() {
 
             <p><?php _e("API key:", 'mt_trans_domain'); ?>
                 <input type="text" name="<?php echo $data_key_name; ?>"
-                       value="<?php echo $api_val; ?>" size="30">
+                       value="<?php echo $api_val; ?>" size="60">
             </p>
             <hr/>
             <p class="submit">
@@ -374,42 +374,111 @@ function api_request_register_admin_page() {
 }
 
 function api_request_render_admin_page() {
-  $film_title = 'film_title';
-  $year = 'year';
+
+
+  /*$film_title = 'title';
+  $original_film_title = 'original_title';
+  $genres = 'genres';
+  $poster_path = 'poster_path';
+  $release = 'release_date';
+  $revenue = 'revenue';
+  $runtime = 'runtime';
+  $production_countries = 'production_countries';
+  $budget = 'budget';
+  $overview = 'overview';*/
+
 
   $hidden_field_name = 'film_request_hidden';
 
-  $data_film_title = 'film_request_content';
-  $data_year = 'year_content';
+  $data_film_title = 'title_request_content';
+  $data_original_film_title = 'original_title';
+  $data_genres = 'genres';
+  $data_poster_path = 'poster_path';
+  $data_release = 'year_content';
+  $data_revenue = 'revenue';
+  $data_runtime = 'runtime';
+  $data_production_countries = 'production_countries';
+  $data_budget = 'budget';
+  $data_overview = 'overview';
 
+  /*$film_title_val = get_option($film_title);
+  $original_film_title_val = get_option($original_film_title);
+  $genres_val = get_option($genres);
+  $poster_path_val = get_option($poster_path);
+  $release_val = get_option($release);
+  $revenue_val = get_option($revenue);
+  $runtime_val = get_option($runtime);
+  $production_countries_val = get_option($production_countries);
+  $budget_val = get_option($budget);
+  $overview_val = get_option($overview);*/
 
-  $film_val = get_option($film_title);
-  $year_val = get_option($year);
+  $api_val = get_option('api_options');
 
   if ($_POST[$hidden_field_name] == 'Y') {
-    $film_val = $_POST[$data_film_title];
-    $year_val = $_POST[$data_year];
-    update_option($film_title, $film_val);
-    update_option($year, $year_val);
-    $url = "http://ec2-18-219-233-220.us-east-2.compute.amazonaws.com/wpr/wp-json/mw/v1/movies?page=" . $film_val . "&per_page=". $year_val ."";
-    // Создаём запрос
-    $ch = curl_init();
-    // Настройка запроса
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    // Отправляем запрос и получаем ответ
-    $data = json_decode(curl_exec($ch));
-    // Закрываем запрос
-    curl_close($ch);
-    //var_dump($data);
-    $data = (array) $data;
-    //var_dump($data);
+
+    $film_title_val = $_POST[$data_film_title];
+    $original_film_title_val = $_POST[$data_original_film_title];
+    $genres_val = $_POST[$data_genres];
+    $poster_path_val = $_POST[$data_poster_path];
+    $release_val = $_POST[$data_release];
+    $revenue_val = $_POST[$data_revenue];
+    $runtime_val = $_POST[$data_runtime];
+    $production_countries_val = $_POST[$data_production_countries];
+    $budget_val = $_POST[$data_budget];
+    $overview_val = $_POST[$data_overview];
+
+
+    /*update_option($film_title, $film_title_val);
+    update_option($original_film_title, $original_film_title_val);
+    update_option($genres, $genres_val);
+    update_option($poster_path, $poster_path_val);
+    update_option($release, $release_val);
+    update_option($revenue, $revenue_val);
+    update_option($runtime, $runtime_val);
+    update_option($production_countries, $production_countries_val);
+    update_option($budget, $budget_val);
+    update_option($overview, $overview_val);*/
+
+
+    $api_response = wp_remote_post('http://movie-world.top/wp-json/wp/v2/movie', [
+      'headers' => [
+        'Authorization' => 'Basic ' . $api_val,
+      ],
+      'body'    => [
+        "title"                => $film_title_val,
+        "original_title"       => $original_film_title_val,
+        "genres"               => $genres_val,
+        "poster_path"          => $poster_path_val,
+        "release_date"         => $release_val,
+        "revenue"              => $revenue_val,
+        "runtime"              => $runtime_val,
+        "production_countries" => $production_countries_val,
+        "budget"               => $budget_val,
+        "overview"             => $overview_val,
+        "status"               => "pending",
+      ],
+    ]);
+
+        if (wp_remote_retrieve_response_message($api_response) === 'Created') {
+          ?>
+              <div class="updated">
+                  <p>
+                      <strong><?php _e('Request sent.', 'mt_trans_domain'); ?></strong>
+                  </p>
+              </div>
+            <?php
+        }
+        else {
     ?>
-      <div class="updated"><p>
-              <strong><?php _e('Request sent.', 'mt_trans_domain'); ?></strong>
-          </p></div>
+      <div class="updated">
+          <p>
+              <strong><?php _e('Error.', 'mt_trans_domain'); ?></strong>
+          </p>
+      </div>
     <?php
+      }
   }
+
   ?>
     <div class="wrap">
         <h2><?= __('Request to add a new movie to the list', 'mt_trans_domain') ?></h2>
@@ -419,43 +488,61 @@ function api_request_render_admin_page() {
             <input type="hidden" name="<?php echo "$hidden_field_name"; ?>"
                    value="Y">
 
-            <p><?php _e("Film key:", 'mt_trans_domain'); ?>
+            <p><?php _e("Film title:", 'mt_trans_domain'); ?>
                 <input type="text" name="<?php echo $data_film_title; ?>"
-                       value="<?php echo $film_val; ?>" size="30">
+                       value="<?php echo $film_title_val; ?>" size="30">
             </p>
-            <p><?php _e("Year:", 'mt_trans_domain'); ?>
-                <input type="text" name="<?php echo $data_year; ?>" value="<?php echo $year_val; ?>" size="30">
+            <p><?php _e("Original title:", 'mt_trans_domain'); ?>
+                <input type="text"
+                       name="<?php echo $data_original_film_title; ?>"
+                       value="<?php echo $original_film_title_val; ?>"
+                       size="30">
+            </p>
+            <p><?php _e("Genre:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_genres; ?>"
+                       value="<?php echo $genres_val; ?>" size="30">
+            </p>
+            <p><?php _e("Poster:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_poster_path; ?>"
+                       value="<?php echo $poster_path_val; ?>" size="30">
+            </p>
+            <p><?php _e("Release:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_release; ?>"
+                       value="<?php echo $release_val; ?>" size="30">
+            </p>
+            <p><?php _e("Revenue:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_revenue; ?>"
+                       value="<?php echo $revenue_val; ?>" size="30">
+            </p>
+            <p><?php _e("Runtime:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_runtime; ?>"
+                       value="<?php echo $runtime_val; ?>" size="30">
+            </p>
+            <p><?php _e("Budget:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_budget; ?>"
+                       value="<?php echo $budget_val; ?>" size="30">
+            </p>
+            <p><?php _e("Country:", 'mt_trans_domain'); ?>
+                <input type="text"
+                       name="<?php echo $data_production_countries; ?>"
+                       value="<?php echo $production_countries_val; ?>"
+                       size="30">
+            </p>
+            <p><?php _e("Overview:", 'mt_trans_domain'); ?>
+            <p><textarea rows="10" cols="60"
+                         name="<?= $data_overview; ?>"><?= $overview_val; ?></textarea>
             </p>
             <hr/>
             <p class="submit">
                 <input type="submit" name="Submit"
-                       value="<?php _e('Update Options', 'mt_trans_domain') ?>"/>
+                       value="<?php _e('Sent request', 'mt_trans_domain') ?>"/>
+                <input type="reset" value="<?php _e('Reset', 'mt_trans_domain') ?>">
             </p>
         </form>
     </div>
     <div class="clear"></div>
   <?php
 }
-
-
-/*add_filter ('get_archives_link',
-    function ($link_html, $url, $text, $format) {
-        switch ($format){
-            case 'swim':
-                var_dump($link_html);
-                var_dump($text);
-                var_dump($format);
-                $link_html = "<li><a href='$url'>"
-                    . "<span class='plus'>+</span> Trip $text"
-                    . '</a></li>';
-                break;
-            default:
-                echo "ERROR";
-                break;
-        }
-        return $link_html;
-    }, 10, 6);*/
-
 
 // добавляет новую крон задачу
 
