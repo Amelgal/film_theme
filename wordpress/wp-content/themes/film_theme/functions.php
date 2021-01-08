@@ -29,84 +29,88 @@ if (!defined('_S_VERSION')) {
   define('_S_VERSION', '1.0.0');
 }
 
-if (!function_exists('film_theme_setup')) :
+if (!function_exists('wp_course_setup')) :
 
-  function film_theme_setup() {
-    /*
-     * Make theme available for translation.
-     * Translations can be filed in the /languages/ directory.
-     * If you're building a theme based on Film theme, use a find and replace
-     * to change 'film_theme' to the name of your theme in all the template files.
-     */
-    load_theme_textdomain('film_theme', get_template_directory() . '/languages');
+    function wp_course_setup()
+    {
+        /*
+         * Make theme available for translation.
+         * Translations can be filed in the /languages/ directory.
+         * If you're building a theme based on Wp_course, use a find and replace
+         * to change 'wp_course' to the name of your theme in all the template files.
+         */
+        load_theme_textdomain('wp_course', get_template_directory() . '/languages');
 
-    // Add default posts and comments RSS feed links to head.
-    add_theme_support('automatic-feed-links');
+        // Add default posts and comments RSS feed links to head.
+        add_theme_support('automatic-feed-links');
 
-    /*
-     * Let WordPress manage the document title.
-     * By adding theme support, we declare that this theme does not use a
-     * hard-coded <title> tag in the document head, and expect WordPress to
-     * provide it for us.
-     */
-    add_theme_support('title-tag');
+        /*
+         * Let WordPress manage the document title.
+         * By adding theme support, we declare that this theme does not use a
+         * hard-coded <title> tag in the document head, and expect WordPress to
+         * provide it for us.
+         */
+        add_theme_support('title-tag');
 
-    /*
-     * Enable support for Post Thumbnails on posts and pages.
-     *
-     * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
-     */
-    add_theme_support('post-thumbnails');
+        /*
+         * Enable support for Post Thumbnails on posts and pages.
+         *
+         * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
+         */
+        add_theme_support('post-thumbnails');
 
-    // This theme uses wp_nav_menu() in one location.
-    register_nav_menus(
-      [
-        'menu-1' => esc_html__('Primary', 'film_theme'),
-      ]
-    );
+        // This theme uses wp_nav_menu() in one location.
+        register_nav_menus(
+            array(
+                'menu-1' => esc_html__('Primary', 'wp_course'),
+                'menu-header' => esc_html__('Header-Menu', 'wp_course'),
+            )
+        );
 
-    /*
-     * Switch default core markup for search form, comment form, and comments
-     * to output valid HTML5.
-     */
-    add_theme_support(
-      'html5',
-      [
-        'search-form',
-        'comment-form',
-        'comment-list',
-        'gallery',
-        'caption',
-        'style',
-        'script',
-      ]
-    );
+        /*
+         * Switch default core markup for search form, comment form, and comments
+         * to output valid HTML5.
+         */
+        add_theme_support(
+            'html5',
+            array(
+                'search-form',
+                'comment-form',
+                'comment-list',
+                'gallery',
+                'caption',
+                'style',
+                'script',
 
-    // Set up the WordPress core custom background feature.
-    add_theme_support(
-      'custom-background',
-      apply_filters(
-        'film_theme_custom_background_args',
-        [
-          'default-color' => 'ffffff',
-          'default-image' => '',
-        ]
-      )
-    );
+            )
+        );
 
-    // Add theme support for selective refresh for widgets.
-    add_theme_support('customize-selective-refresh-widgets');
+        // Set up the WordPress core custom background feature.
+        add_theme_support(
+            'custom-background',
+            apply_filters(
+                'wp_course_custom_background_args',
+                array(
+                    'default-color' => 'ffffff',
+                    'default-image' => '',
+                )
+            )
+        );
 
-    add_theme_support(
-      'custom-logo',
-      [
-        'height'      => 250,
-        'width'       => 250,
-        'flex-width'  => TRUE,
-        'flex-height' => TRUE,
-      ]
-    );
-  }
+        // Add theme support for selective refresh for widgets.
+        add_theme_support('customize-selective-refresh-widgets');
+
+        add_theme_support(
+            'custom-logo',
+            array(
+                'height' => 250,
+                'width' => 250,
+                'flex-width' => true,
+                'flex-height' => true,
+            )
+        );
+    }
+
 endif;
 add_action('after_setup_theme', 'film_theme_setup');
 
@@ -135,14 +139,25 @@ add_action('widgets_init', 'film_theme_widgets_init');
 /**
  * Enqueue scripts and styles.
  */
-function film_theme_scripts() {
-  wp_enqueue_style('film_theme-style', get_stylesheet_uri(), [], _S_VERSION);
-  wp_enqueue_style('normalize', get_template_directory_uri() . '/assets/css/normalize.css', ["film_theme-style"], _S_VERSION);
-  wp_enqueue_style('film_theme-main-style', get_template_directory_uri() . '/assets/css/style.css', ["film_theme-style"], _S_VERSION);
+
+function wp_course_scripts()
+{
+    wp_enqueue_style('wp_course-style', get_stylesheet_uri(), array(), _S_VERSION);
+    wp_enqueue_style('normalize', get_template_directory_uri() . '/assets/css/normalize.css', array("wp_course-style"), _S_VERSION);
+    wp_enqueue_style('wp_course-main-style', get_template_directory_uri() . '/assets/css/style.css', array("wp_course-style"), _S_VERSION);
+    // wp_enqueue_style('bootstrap-main', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap.min.css');
+    wp_enqueue_style('bootstrap-grid', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap-grid.min.css');
+    // wp_enqueue_style('bootstrap-reboot', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap-reboot.min.css');
+
 
   wp_style_add_data('film_theme-style', 'rtl', 'replace');
 
-  wp_enqueue_script('film_theme-navigation', get_template_directory_uri() . '/js/navigation.js', [], _S_VERSION, TRUE);
+    // Add fonts
+    wp_enqueue_style('font-connection', get_template_directory_uri() . '/assets/css/font-connection.css');
+
+    wp_enqueue_script('wp_course-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true);
+    wp_enqueue_script('bootstrap-main', get_template_directory_uri() . '/assets/bootstrap-4.3.1/js/bootstrap.min.js', array(), _S_VERSION, true);
+    wp_enqueue_script('bootstrap-bundle', get_template_directory_uri() . '/assets/bootstrap-4.3.1/js/bootstrap.bundle.min.js', array(), _S_VERSION, true);
 
   if (is_singular() && comments_open() && get_option('thread_comments')) {
     wp_enqueue_script('comment-reply');
@@ -307,9 +322,24 @@ function slider_func(array $atts) {
               </div>
           </div><!-- .services__item -->
         <?php
-        wp_reset_postdata();
-      endforeach;
-      ?>
+
+        $myposts = get_posts($atts);
+        foreach ($myposts as $post) :
+            setup_postdata($post); ?>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                <article>
+                    <?php
+                    $id_post = get_the_ID();
+                    ?>
+                    <img src="<?php echo get_post_meta( $id_post, 'poster_path', 1 ); ?>" alt="">
+                    <?php the_excerpt(); ?>
+                    <h2><a href="<?php echo the_permalink();?>"><?php the_title(); ?></a></h2>
+                </article>
+            </div>
+            <?php
+            wp_reset_postdata();
+        endforeach;
+        ?>
     </div>
     </section><?php
 }
@@ -548,4 +578,43 @@ function api_request_render_admin_page() {
 
 new Cron();
 
+
+// Limiting the output characters for the the_excerpt();
+add_filter( 'excerpt_length', function(){
+    return 15;
+} );
+
+// Short code for to output all movies
+function all_movies_func(array $atts)
+{
+    global $post;
+    $atts['numberposts'] = (int)$atts['numberposts'];
+    ?>
+    <section class="services">
+    <div class="services__items">
+        <?php
+        $myposts = get_posts($atts);
+        foreach ($myposts as $post) :
+            setup_postdata($post); ?>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                <article>
+                    <?php
+                        $id_post = get_the_ID();
+                    ?>
+                    <img src="<?php echo get_post_meta( $id_post, 'poster_path', 1 ); ?>" alt="">
+                    <?php the_excerpt(); ?>
+                    <h2><a href="<?php echo the_permalink();?>"><?php the_title(); ?></a></h2>
+                </article>
+            </div>
+            <?php
+
+            wp_reset_postdata();
+        endforeach;
+        ?>
+    </div>
+    </section><?php
+
+}
+
+add_shortcode('all_movies', 'all_movies_func');
 

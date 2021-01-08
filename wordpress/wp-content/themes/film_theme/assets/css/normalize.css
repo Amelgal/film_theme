@@ -7,12 +7,12 @@ body {
   margin: 0;
 }
 
-main {
+/*main {
   float: left;
   justify-content: center;
   width: 70%;
   padding: 20px;
-}
+}*/
 
 h1 {
   font-size: 2em;
@@ -335,7 +335,7 @@ text-align: center;
   width: calc(33.33% - 15px);
   height: auto;
   margin: 0 15px 0 0;
-  border: 6px solid #00874F;
+  border: 1px solid rgba(176, 176, 176, 0.6);
   padding: 30px 13px;
   outline: none;
 }
