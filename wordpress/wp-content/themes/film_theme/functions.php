@@ -309,17 +309,16 @@ function slider_func(array $atts)
         $myposts = get_posts($atts);
         foreach ($myposts as $post) :
             setup_postdata($post); ?>
-            <div class="services__item">
-                <?php the_title('<h3 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h3>'); ?>
-                <div class="services__text">
-                    <?php do_excerpt(get_the_excerpt(), 20); ?>
-                </div><!-- .services__text -->
-                <div class="custom-meta-box">
-                    <h5>Popularity of this type: <?= ucfirst(get_post_meta(get_the_ID(), 'popularity', true)) ?></h5>
-                    <h5>Difficult of this
-                        type: <?= ucfirst(get_post_meta(get_the_ID(), 'difficulty_type', true)) ?></h5>
-                </div>
-            </div><!-- .services__item -->
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                <article>
+                    <?php
+                    $id_post = get_the_ID();
+                    ?>
+                    <img src="<?php echo get_post_meta( $id_post, 'poster_path', 1 ); ?>" alt="">
+                    <?php the_excerpt(); ?>
+                    <h2><a href="<?php echo the_permalink();?>"><?php the_title(); ?></a></h2>
+                </article>
+            </div>
             <?php
             wp_reset_postdata();
         endforeach;
@@ -347,3 +346,43 @@ add_shortcode('slider', 'slider_func');
 //        }
 //        return $link_html;
 //    }, 10, 6);
+
+
+// Limiting the output characters for the the_excerpt();
+add_filter( 'excerpt_length', function(){
+    return 15;
+} );
+
+// Short code for to output all movies
+function all_movies_func(array $atts)
+{
+    global $post;
+    $atts['numberposts'] = (int)$atts['numberposts'];
+    ?>
+    <section class="services">
+    <div class="services__items">
+        <?php
+        $myposts = get_posts($atts);
+        foreach ($myposts as $post) :
+            setup_postdata($post); ?>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                <article>
+                    <?php
+                        $id_post = get_the_ID();
+                    ?>
+                    <img src="<?php echo get_post_meta( $id_post, 'poster_path', 1 ); ?>" alt="">
+                    <?php the_excerpt(); ?>
+                    <h2><a href="<?php echo the_permalink();?>"><?php the_title(); ?></a></h2>
+                </article>
+            </div>
+            <?php
+
+            wp_reset_postdata();
+        endforeach;
+        ?>
+    </div>
+    </section><?php
+
+}
+
+add_shortcode('all_movies', 'all_movies_func');

@@ -5,16 +5,6 @@
             <div class="row">
                 <?php if (have_posts()) : ?>
 
-                <!--- Для чего этот блок!!! ????--->
-                    <header class="page-header">
-                        <?php
-                        //the_archive_title('<h1 class="page-title">', '</h1>');
-                         the_archive_description('<div class="archive-description">', '</div>');
-                        ?>
-                    </header><!-- .page-header -->
-
-                <!--- Для чего этот блок!!! ????--->
-
                     <?php
                     /* Start the Loop */
                     while (have_posts()) :
@@ -26,17 +16,24 @@
                             <?php
                             //get_template_part('template-parts/content', get_post_type());
                             //the_meta();
-                            the_excerpt() ?>
+                            $id_post = get_the_ID();
+                            ?>
+                            <img src="<?php echo get_post_meta( $id_post, 'poster_path', 1 ); ?>" alt="">
+                            <?php the_excerpt(); ?>
                             <h2><a href="<?php echo the_permalink();?>"><?php the_title(); ?></a></h2>
                         </article>
                     </div>
 
 
                     <?php
-                        endwhile;
+                        endwhile; ?>
 
-                        the_posts_navigation();
+                    <div class="navigation">
+                        <div class="next-posts"><?php next_posts_link(); ?></div>
+                        <div class="prev-posts"><?php previous_posts_link(); ?></div>
+                    </div>
 
+                    <?php
                         else :
 
                             get_template_part('template-parts/content', 'none');
