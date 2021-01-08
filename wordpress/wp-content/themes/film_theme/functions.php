@@ -29,9 +29,9 @@ if (!defined('_S_VERSION')) {
   define('_S_VERSION', '1.0.0');
 }
 
-if (!function_exists('wp_course_setup')) :
+if (!function_exists('film_theme_setup')) :
 
-    function wp_course_setup()
+    function film_theme_setup()
     {
         /*
          * Make theme available for translation.
@@ -39,7 +39,7 @@ if (!function_exists('wp_course_setup')) :
          * If you're building a theme based on Wp_course, use a find and replace
          * to change 'wp_course' to the name of your theme in all the template files.
          */
-        load_theme_textdomain('wp_course', get_template_directory() . '/languages');
+        load_theme_textdomain('film_theme', get_template_directory() . '/languages');
 
         // Add default posts and comments RSS feed links to head.
         add_theme_support('automatic-feed-links');
@@ -62,8 +62,8 @@ if (!function_exists('wp_course_setup')) :
         // This theme uses wp_nav_menu() in one location.
         register_nav_menus(
             array(
-                'menu-1' => esc_html__('Primary', 'wp_course'),
-                'menu-header' => esc_html__('Header-Menu', 'wp_course'),
+                'menu-1' => esc_html__('Primary', 'film_theme'),
+                'menu-header' => esc_html__('Header-Menu', 'film_theme'),
             )
         );
 
@@ -89,7 +89,7 @@ if (!function_exists('wp_course_setup')) :
         add_theme_support(
             'custom-background',
             apply_filters(
-                'wp_course_custom_background_args',
+                'film_theme_custom_background_args',
                 array(
                     'default-color' => 'ffffff',
                     'default-image' => '',
@@ -140,11 +140,11 @@ add_action('widgets_init', 'film_theme_widgets_init');
  * Enqueue scripts and styles.
  */
 
-function wp_course_scripts()
+function film_theme_scripts()
 {
-    wp_enqueue_style('wp_course-style', get_stylesheet_uri(), array(), _S_VERSION);
-    wp_enqueue_style('normalize', get_template_directory_uri() . '/assets/css/normalize.css', array("wp_course-style"), _S_VERSION);
-    wp_enqueue_style('wp_course-main-style', get_template_directory_uri() . '/assets/css/style.css', array("wp_course-style"), _S_VERSION);
+    wp_enqueue_style('film_theme-style', get_stylesheet_uri(), array(), _S_VERSION);
+    wp_enqueue_style('normalize', get_template_directory_uri() . '/assets/css/normalize.css', array("film_theme-style"), _S_VERSION);
+    wp_enqueue_style('film_theme-main-style', get_template_directory_uri() . '/assets/css/style.css', array("film_theme-style"), _S_VERSION);
     // wp_enqueue_style('bootstrap-main', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap.min.css');
     wp_enqueue_style('bootstrap-grid', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap-grid.min.css');
     // wp_enqueue_style('bootstrap-reboot', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap-reboot.min.css');
@@ -155,7 +155,7 @@ function wp_course_scripts()
     // Add fonts
     wp_enqueue_style('font-connection', get_template_directory_uri() . '/assets/css/font-connection.css');
 
-    wp_enqueue_script('wp_course-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true);
+    wp_enqueue_script('film_theme-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true);
     wp_enqueue_script('bootstrap-main', get_template_directory_uri() . '/assets/bootstrap-4.3.1/js/bootstrap.min.js', array(), _S_VERSION, true);
     wp_enqueue_script('bootstrap-bundle', get_template_directory_uri() . '/assets/bootstrap-4.3.1/js/bootstrap.bundle.min.js', array(), _S_VERSION, true);
 
@@ -341,7 +341,10 @@ function slider_func(array $atts) {
         endforeach;
         ?>
     </div>
-    </section><?php
+    </section>
+          <?php
+      endforeach;
+
 }
 
 add_shortcode('slider', 'slider_func');
