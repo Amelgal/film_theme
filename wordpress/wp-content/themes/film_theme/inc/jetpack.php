@@ -4,7 +4,7 @@
  *
  * @link https://jetpack.com/
  *
- * @package Wp_course
+ * @package Film_theme
  */
 
 /**
@@ -14,13 +14,13 @@
  * See: https://jetpack.com/support/responsive-videos/
  * See: https://jetpack.com/support/content-options/
  */
-function wp_course_jetpack_setup() {
+function film_theme_jetpack_setup() {
 	// Add theme support for Infinite Scroll.
 	add_theme_support(
 		'infinite-scroll',
 		array(
 			'container' => 'main',
-			'render'    => 'wp_course_infinite_scroll_render',
+			'render'    => 'film_theme_infinite_scroll_render',
 			'footer'    => 'page',
 		)
 	);
@@ -33,7 +33,7 @@ function wp_course_jetpack_setup() {
 		'jetpack-content-options',
 		array(
 			'post-details' => array(
-				'stylesheet' => 'wp_course-style',
+				'stylesheet' => 'film_theme-style',
 				'date'       => '.posted-on',
 				'categories' => '.cat-links',
 				'tags'       => '.tags-links',
@@ -48,12 +48,12 @@ function wp_course_jetpack_setup() {
 		)
 	);
 }
-add_action( 'after_setup_theme', 'wp_course_jetpack_setup' );
+add_action( 'after_setup_theme', 'film_theme_jetpack_setup' );
 
 /**
  * Custom render function for Infinite Scroll.
  */
-function wp_course_infinite_scroll_render() {
+function film_theme_infinite_scroll_render() {
 	while ( have_posts() ) {
 		the_post();
 		if ( is_search() ) :

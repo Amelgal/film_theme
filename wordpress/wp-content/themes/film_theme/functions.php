@@ -10,6 +10,7 @@ use Metabox\Release_Metabox;
 use Metabox\Revenue_Metabox;
 use Metabox\Runtime_Metabox;
 use Metabox\Overview_Metabox;
+use Core\Cron;
 
 require_once(DIR_PATH . '/class-metabox/class-poster-path-metabox.php');
 require_once(DIR_PATH . '/class-metabox/class-budget-metabox.php');
@@ -20,11 +21,12 @@ require_once(DIR_PATH . '/class-metabox/class-revenue-metabox.php');
 require_once(DIR_PATH . '/class-metabox/class-runtime-metabox.php');
 require_once(DIR_PATH . '/class-metabox/class-overview-metabox.php');
 require_once(DIR_PATH . '/class-metabox/class-genre-metabox.php');
+require_once(DIR_PATH . '/core/class-cron.php');
 
 
 if (!defined('_S_VERSION')) {
-    // Replace the version number of the theme on each release.
-    define('_S_VERSION', '1.0.0');
+  // Replace the version number of the theme on each release.
+  define('_S_VERSION', '1.0.0');
 }
 
 if (!function_exists('wp_course_setup')) :
@@ -108,36 +110,36 @@ if (!function_exists('wp_course_setup')) :
             )
         );
     }
+
 endif;
-add_action('after_setup_theme', 'wp_course_setup');
+add_action('after_setup_theme', 'film_theme_setup');
 
-function wp_course_content_width()
-{
-    $GLOBALS['content_width'] = apply_filters('wp_course_content_width', 640);
+function film_theme_content_width() {
+  $GLOBALS['content_width'] = apply_filters('film_theme_content_width', 640);
 }
 
-add_action('after_setup_theme', 'wp_course_content_width', 0);
+add_action('after_setup_theme', 'film_theme_content_width', 0);
 
-function wp_course_widgets_init()
-{
-    register_sidebar(
-        array(
-            'name' => esc_html__('Sidebar', 'wp_course'),
-            'id' => 'sidebar-1',
-            'description' => esc_html__('Add widgets here.', 'wp_course'),
-            'before_widget' => '<section id="%1$s" class="widget %2$s">',
-            'after_widget' => '</section>',
-            'before_title' => '<h2 class="widget-title">',
-            'after_title' => '</h2>',
-        )
-    );
+function film_theme_widgets_init() {
+  register_sidebar(
+    [
+      'name'          => esc_html__('Sidebar', 'film_theme'),
+      'id'            => 'sidebar-1',
+      'description'   => esc_html__('Add widgets here.', 'film_theme'),
+      'before_widget' => '<section id="%1$s" class="widget %2$s">',
+      'after_widget'  => '</section>',
+      'before_title'  => '<h2 class="widget-title">',
+      'after_title'   => '</h2>',
+    ]
+  );
 }
 
-add_action('widgets_init', 'wp_course_widgets_init');
+add_action('widgets_init', 'film_theme_widgets_init');
 
 /**
  * Enqueue scripts and styles.
  */
+
 function wp_course_scripts()
 {
     wp_enqueue_style('wp_course-style', get_stylesheet_uri(), array(), _S_VERSION);
@@ -147,7 +149,8 @@ function wp_course_scripts()
     wp_enqueue_style('bootstrap-grid', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap-grid.min.css');
     // wp_enqueue_style('bootstrap-reboot', get_template_directory_uri() . '/assets/bootstrap-4.3.1/css/bootstrap-reboot.min.css');
 
-    wp_style_add_data('wp_course-style', 'rtl', 'replace');
+
+  wp_style_add_data('film_theme-style', 'rtl', 'replace');
 
     // Add fonts
     wp_enqueue_style('font-connection', get_template_directory_uri() . '/assets/css/font-connection.css');
@@ -156,36 +159,35 @@ function wp_course_scripts()
     wp_enqueue_script('bootstrap-main', get_template_directory_uri() . '/assets/bootstrap-4.3.1/js/bootstrap.min.js', array(), _S_VERSION, true);
     wp_enqueue_script('bootstrap-bundle', get_template_directory_uri() . '/assets/bootstrap-4.3.1/js/bootstrap.bundle.min.js', array(), _S_VERSION, true);
 
-    if (is_singular() && comments_open() && get_option('thread_comments')) {
-        wp_enqueue_script('comment-reply');
-    }
+  if (is_singular() && comments_open() && get_option('thread_comments')) {
+    wp_enqueue_script('comment-reply');
+  }
 }
 
-add_action('wp_enqueue_scripts', 'wp_course_scripts');
+add_action('wp_enqueue_scripts', 'film_theme_scripts');
 
-function film_setup_post_type()
-{
-    $labels = array(
-        'name' => _x('Film', 'Post type general name', 'textdomain'),
-        'singular_name' => _x('Film', 'Post type singular name', 'textdomain'),
-        'menu_name' => _x('Film', 'Admin Menu text', 'textdomain'),
-        'name_admin_bar' => _x('Film', 'Add New on Toolbar', 'textdomain'),
-        'add_new' => __('Add New', 'textdomain'),
-        'add_new_item' => __('Add New type', 'textdomain'),
-        'new_item' => __('New type', 'textdomain'),
-        'edit_item' => __('Edit type', 'textdomain'),
-        'view_item' => __('View type', 'textdomain'),
-        'all_items' => __('All types', 'textdomain'),
-        'search_items' => __('Search type', 'textdomain'),
-        'not_found' => __('No types found.', 'textdomain'),
-        'archives' => _x('Types archives', 'The post type archive label used in nav menus. Default “Post Archives”. Added in 4.4', 'textdomain'),
-    );
-    $args = array(
-        'public' => true,
-        'labels' => $labels,
-        'has_archive' => true,
-    );
-    register_post_type('Film', $args);
+function film_setup_post_type() {
+  $labels = [
+    'name'           => _x('Film', 'Post type general name', 'textdomain'),
+    'singular_name'  => _x('Film', 'Post type singular name', 'textdomain'),
+    'menu_name'      => _x('Film', 'Admin Menu text', 'textdomain'),
+    'name_admin_bar' => _x('Film', 'Add New on Toolbar', 'textdomain'),
+    'add_new'        => __('Add New', 'textdomain'),
+    'add_new_item'   => __('Add New type', 'textdomain'),
+    'new_item'       => __('New type', 'textdomain'),
+    'edit_item'      => __('Edit type', 'textdomain'),
+    'view_item'      => __('View type', 'textdomain'),
+    'all_items'      => __('All types', 'textdomain'),
+    'search_items'   => __('Search type', 'textdomain'),
+    'not_found'      => __('No types found.', 'textdomain'),
+    'archives'       => _x('Types archives', 'The post type archive label used in nav menus. Default “Post Archives”. Added in 4.4', 'textdomain'),
+  ];
+  $args = [
+    'public'      => TRUE,
+    'labels'      => $labels,
+    'has_archive' => TRUE,
+  ];
+  register_post_type('Film', $args);
 }
 
 add_action('init', 'film_setup_post_type');
@@ -194,81 +196,80 @@ add_action('init', 'film_setup_post_type');
  * Register meta box(es).
  * Save meta box content.
  */
-new Genre_Metabox('genre_meta_box_id',              __('Genre', 'textdomain'),         'film');
-new Original_Title_Metabox('orig_title_meta_box_id',__('Original title', 'textdomain'),'film');
-new Poster_Metabox('poster_path_meta_box_id',       __('Poster path', 'textdomain'),   'film');
-new Release_Metabox('release_meta_box_id',          __('Release', 'textdomain'),       'film');
-new Revenue_Metabox('revenue_meta_box_id',          __('Revenue', 'textdomain'),       'film');
-new Budget_Metabox('budget_meta_box_id',            __('Budget', 'textdomain'),        'film','side');
-new Country_Metabox('country_meta_box_id',          __('Country', 'textdomain'),       'film','side');
-new Runtime_Metabox('runtime_meta_box_id',          __('Runtime', 'textdomain'),       'film','side');
-new Overview_Metabox('overview_meta_box_id',        __('Overview', 'textdomain'),      'film','side');
+new Genre_Metabox('genre_meta_box_id', __('Genre', 'textdomain'), 'film');
+new Original_Title_Metabox('orig_title_meta_box_id', __('Original title', 'textdomain'), 'film');
+new Poster_Metabox('poster_path_meta_box_id', __('Poster path', 'textdomain'), 'film');
+new Release_Metabox('release_meta_box_id', __('Release', 'textdomain'), 'film');
+new Revenue_Metabox('revenue_meta_box_id', __('Revenue', 'textdomain'), 'film');
+new Budget_Metabox('budget_meta_box_id', __('Budget', 'textdomain'), 'film', 'side');
+new Country_Metabox('country_meta_box_id', __('Country', 'textdomain'), 'film', 'side');
+new Runtime_Metabox('runtime_meta_box_id', __('Runtime', 'textdomain'), 'film', 'side');
+new Overview_Metabox('overview_meta_box_id', __('Overview', 'textdomain'), 'film', 'side');
 
 
 /**
  * Register taxonomy(ies).
  */
-function wp_course_register_taxonomies()
-{
+function film_theme_register_taxonomies() {
 
-    register_taxonomy('film_genre',
-        array('film'),
-        array(
-            'hierarchical' => true,
-            /* true - по типу рубрик, false - по типу меток,
-            по умолчанию - false */
-            'labels' => array(
-                /* ярлыки, нужные при создании UI, можете
-                не писать ничего, тогда будут использованы
-                ярлыки по умолчанию */
-                'name' => 'Film genre',
-                'singular_name' => 'Genre',
-                'search_items' => 'Search genre',
-                'all_items' => 'All genres',
-                'parent_item' => null,
-                'parent_item_colon' => null,
-                'edit_item' => 'Edit',
-                'update_item' => 'Update genre',
-                'add_new_item' => 'Add new genre',
-                'new_item_name' => 'Add new genre name',
-                //'separate_items_with_commas' => 'Разделяйте платформы запятыми',
-                //'add_or_remove_items' => 'Добавить или удалить платформу',
-                // 'choose_from_most_used' => 'Выбрать из наиболее часто используемых платформ',
-                'menu_name' => 'Film genre'
-            ),
-            'public' => true,
-            /* каждый может использовать таксономию, либо
-            только администраторы, по умолчанию - true */
-            'show_in_nav_menus' => true,
-            /* добавить на страницу создания меню */
-            'show_ui' => true,
-            /* добавить интерфейс создания и редактирования */
-            'show_tagcloud' => true,
-            /* нужно ли разрешить облако тегов для этой таксономии */
-            'update_count_callback' => '_update_post_term_count',
-            /* callback-функция для обновления счетчика $object_type */
-            'query_var' => true,
-            /* разрешено ли использование query_var, также можно
-            указать строку, которая будет использоваться в качестве
-            него, по умолчанию - имя таксономии */
-            'rewrite' => array(
-                /* настройки URL пермалинков */
-                //'slug' => 'platform', // ярлык
-                'hierarchical' => false // разрешить вложенность
+  register_taxonomy('film_genre',
+    ['film'],
+    [
+      'hierarchical'          => TRUE,
+      /* true - по типу рубрик, false - по типу меток,
+      по умолчанию - false */
+      'labels'                => [
+        /* ярлыки, нужные при создании UI, можете
+        не писать ничего, тогда будут использованы
+        ярлыки по умолчанию */
+        'name'              => 'Film genre',
+        'singular_name'     => 'Genre',
+        'search_items'      => 'Search genre',
+        'all_items'         => 'All genres',
+        'parent_item'       => NULL,
+        'parent_item_colon' => NULL,
+        'edit_item'         => 'Edit',
+        'update_item'       => 'Update genre',
+        'add_new_item'      => 'Add new genre',
+        'new_item_name'     => 'Add new genre name',
+        //'separate_items_with_commas' => 'Разделяйте платформы запятыми',
+        //'add_or_remove_items' => 'Добавить или удалить платформу',
+        // 'choose_from_most_used' => 'Выбрать из наиболее часто используемых платформ',
+        'menu_name'         => 'Film genre',
+      ],
+      'public'                => TRUE,
+      /* каждый может использовать таксономию, либо
+      только администраторы, по умолчанию - true */
+      'show_in_nav_menus'     => TRUE,
+      /* добавить на страницу создания меню */
+      'show_ui'               => TRUE,
+      /* добавить интерфейс создания и редактирования */
+      'show_tagcloud'         => TRUE,
+      /* нужно ли разрешить облако тегов для этой таксономии */
+      'update_count_callback' => '_update_post_term_count',
+      /* callback-функция для обновления счетчика $object_type */
+      'query_var'             => TRUE,
+      /* разрешено ли использование query_var, также можно
+      указать строку, которая будет использоваться в качестве
+      него, по умолчанию - имя таксономии */
+      'rewrite'               => [
+        /* настройки URL пермалинков */
+        //'slug' => 'platform', // ярлык
+        'hierarchical' => FALSE // разрешить вложенность
 
-            ),
-        )
-    );
+      ],
+    ]
+  );
 }
 
-add_action('init', 'wp_course_register_taxonomies', 0);
+add_action('init', 'film_theme_register_taxonomies', 0);
 
-function do_excerpt($string, $word_limit)
-{
-    $words = explode(' ', $string, ($word_limit + 1));
-    if (count($words) > $word_limit)
-        array_pop($words);
-    echo implode(' ', $words) . ' ...';
+function do_excerpt($string, $word_limit) {
+  $words = explode(' ', $string, ($word_limit + 1));
+  if (count($words) > $word_limit) {
+    array_pop($words);
+  }
+  echo implode(' ', $words) . ' ...';
 }
 
 /**
@@ -295,17 +296,33 @@ require get_template_directory() . '/inc/customizer.php';
  * Load Jetpack compatibility file.
  */
 if (defined('JETPACK__VERSION')) {
-    require get_template_directory() . '/inc/jetpack.php';
+  require get_template_directory() . '/inc/jetpack.php';
 }
 
-function slider_func(array $atts)
-{
-    global $post;
-    $atts['numberposts'] = (int)$atts['numberposts'];
-    ?>
+function slider_func(array $atts) {
+  global $post;
+  $atts['numberposts'] = (int) $atts['numberposts'];
+  ?>
     <section class="services">
     <div class="services__items">
+      <?php
+      $myposts = get_posts($atts);
+      foreach ($myposts as $post) :
+        setup_postdata($post); ?>
+          <div class="services__item">
+            <?php the_title('<h3 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h3>'); ?>
+              <div class="services__text">
+                <?php do_excerpt(get_the_excerpt(), 20); ?>
+              </div><!-- .services__text -->
+              <div class="custom-meta-box">
+                  <h5>Popularity of this
+                      type: <?= ucfirst(get_post_meta(get_the_ID(), 'popularity', TRUE)) ?></h5>
+                  <h5>Difficult of this
+                      type: <?= ucfirst(get_post_meta(get_the_ID(), 'difficulty_type', TRUE)) ?></h5>
+              </div>
+          </div><!-- .services__item -->
         <?php
+
         $myposts = get_posts($atts);
         foreach ($myposts as $post) :
             setup_postdata($post); ?>
@@ -329,23 +346,237 @@ function slider_func(array $atts)
 
 add_shortcode('slider', 'slider_func');
 
-//add_filter ('get_archives_link',
-//    function ($link_html, $url, $text, $format) {
-//        switch ($format){
-//            case 'swim':
-//                var_dump($link_html);
-//                var_dump($text);
-//                var_dump($format);
-//                $link_html = "<li><a href='$url'>"
-//                    . "<span class='plus'>+</span> Trip $text"
-//                    . '</a></li>';
-//                break;
-//            default:
-//                echo "ERROR";
-//                break;
-//        }
-//        return $link_html;
-//    }, 10, 6);
+
+add_action('admin_menu', 'mt_add_pages');
+// action function for above hook
+function mt_add_pages() {
+  add_menu_page('API', 'API config', 8, __FILE__, 'mt_toplevel_page');
+}
+
+function mt_toplevel_page() {
+
+  $api_key = 'api_options';
+  $hidden_field_name = 'api_options_hidden';
+  $data_key_name = 'api_options_content';
+
+  $api_val = get_option($api_key);
+
+  if ($_POST[$hidden_field_name] == 'Y') {
+    $api_val = $_POST[$data_key_name];
+    update_option($api_key, $api_val);
+    ?>
+      <div class="updated"><p>
+              <strong><?php _e('Options saved.', 'mt_trans_domain'); ?></strong>
+          </p></div>
+    <?php
+  }
+  ?>
+    <div class="wrap">
+        <h2><?= __('API Options', 'mt_trans_domain') ?></h2>
+        <form name="form1" method="post"
+              action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+
+            <input type="hidden" name="<?php echo $hidden_field_name; ?>"
+                   value="Y">
+
+            <p><?php _e("API key:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_key_name; ?>"
+                       value="<?php echo $api_val; ?>" size="60">
+            </p>
+            <hr/>
+            <p class="submit">
+                <input type="submit" name="Submit"
+                       value="<?php _e('Update Options', 'mt_trans_domain') ?>"/>
+            </p>
+        </form>
+    </div>
+  <?php
+}
+
+add_action('admin_menu', 'api_request_register_admin_page');
+function api_request_register_admin_page() {
+  add_submenu_page(
+    'edit.php?post_type=film',
+    'API request',
+    'Add new film',
+    'manage_categories',
+    'api-request',
+    'api_request_render_admin_page'
+  );
+}
+
+function api_request_render_admin_page() {
+  /*
+   $film_title = 'title';
+   $original_film_title = 'original_title';
+   $genres = 'genres';
+   $poster_path = 'poster_path';
+   $release = 'release_date';
+   $revenue = 'revenue';
+   $runtime = 'runtime';
+   $production_countries = 'production_countries';
+   $budget = 'budget';
+   $overview = 'overview';
+
+   $film_title_val = get_option($film_title);
+   $original_film_title_val = get_option($original_film_title);
+   $genres_val = get_option($genres);
+   $poster_path_val = get_option($poster_path);
+   $release_val = get_option($release);
+   $revenue_val = get_option($revenue);
+   $runtime_val = get_option($runtime);
+   $production_countries_val = get_option($production_countries);
+   $budget_val = get_option($budget);
+   $overview_val = get_option($overview);
+ */
+
+  $hidden_field_name = 'film_request_hidden';
+
+  $data_film_title = 'title_request_content';
+  $data_original_film_title = 'original_title';
+  $data_genres = 'genres';
+  $data_poster_path = 'poster_path';
+  $data_release = 'year_content';
+  $data_revenue = 'revenue';
+  $data_runtime = 'runtime';
+  $data_production_countries = 'production_countries';
+  $data_budget = 'budget';
+  $data_overview = 'overview';
+
+  $api_val = get_option('api_options');
+
+  if ($_POST[$hidden_field_name] == 'Y') {
+
+    $film_title_val = $_POST[$data_film_title];
+    $original_film_title_val = $_POST[$data_original_film_title];
+    $genres_val = $_POST[$data_genres];
+    $poster_path_val = $_POST[$data_poster_path];
+    $release_val = $_POST[$data_release];
+    $revenue_val = $_POST[$data_revenue];
+    $runtime_val = $_POST[$data_runtime];
+    $production_countries_val = $_POST[$data_production_countries];
+    $budget_val = $_POST[$data_budget];
+    $overview_val = $_POST[$data_overview];
+
+    /*
+    update_option($film_title, $film_title_val);
+    update_option($original_film_title, $original_film_title_val);
+    update_option($genres, $genres_val);
+    update_option($poster_path, $poster_path_val);
+    update_option($release, $release_val);
+    update_option($revenue, $revenue_val);
+    update_option($runtime, $runtime_val);
+    update_option($production_countries, $production_countries_val);
+    update_option($budget, $budget_val);
+    update_option($overview, $overview_val);
+    */
+
+    $api_response = wp_remote_post('http://movie-world.top/wp-json/wp/v2/movie', [
+      'headers' => [
+        'Authorization' => 'Basic ' . $api_val,
+      ],
+      'body'    => [
+        "title"                => $film_title_val,
+        "original_title"       => $original_film_title_val,
+        "genres"               => $genres_val,
+        "poster_path"          => $poster_path_val,
+        "release_date"         => $release_val,
+        "revenue"              => $revenue_val,
+        "runtime"              => $runtime_val,
+        "production_countries" => $production_countries_val,
+        "budget"               => $budget_val,
+        "overview"             => $overview_val,
+        "status"               => "pending",
+      ],
+    ]);
+
+    if (wp_remote_retrieve_response_message($api_response) === 'Created') {
+      ?>
+        <div class="updated">
+            <p>
+                <strong><?php _e('Request sent.', 'mt_trans_domain'); ?></strong>
+            </p>
+        </div>
+      <?php
+    }
+    else {
+      ?>
+        <div class="updated">
+            <p>
+                <strong><?php _e('Error.', 'mt_trans_domain'); ?></strong>
+            </p>
+        </div>
+      <?php
+    }
+  }
+
+  ?>
+    <div class="wrap">
+        <h2><?= __('Request to add a new movie to the list', 'mt_trans_domain') ?></h2>
+        <form name="form1" method="post"
+              action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+
+            <input type="hidden" name="<?php echo "$hidden_field_name"; ?>"
+                   value="Y">
+
+            <p><?php _e("Film title:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_film_title; ?>"
+                       value="<?php echo $film_title_val; ?>" size="30">
+            </p>
+            <p><?php _e("Original title:", 'mt_trans_domain'); ?>
+                <input type="text"
+                       name="<?php echo $data_original_film_title; ?>"
+                       value="<?php echo $original_film_title_val; ?>"
+                       size="30">
+            </p>
+            <p><?php _e("Genre:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_genres; ?>"
+                       value="<?php echo $genres_val; ?>" size="30">
+            </p>
+            <p><?php _e("Poster:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_poster_path; ?>"
+                       value="<?php echo $poster_path_val; ?>" size="30">
+            </p>
+            <p><?php _e("Release:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_release; ?>"
+                       value="<?php echo $release_val; ?>" size="30">
+            </p>
+            <p><?php _e("Revenue:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_revenue; ?>"
+                       value="<?php echo $revenue_val; ?>" size="30">
+            </p>
+            <p><?php _e("Runtime:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_runtime; ?>"
+                       value="<?php echo $runtime_val; ?>" size="30">
+            </p>
+            <p><?php _e("Budget:", 'mt_trans_domain'); ?>
+                <input type="text" name="<?php echo $data_budget; ?>"
+                       value="<?php echo $budget_val; ?>" size="30">
+            </p>
+            <p><?php _e("Country:", 'mt_trans_domain'); ?>
+                <input type="text"
+                       name="<?php echo $data_production_countries; ?>"
+                       value="<?php echo $production_countries_val; ?>"
+                       size="30">
+            </p>
+            <p><?php _e("Overview:", 'mt_trans_domain'); ?>
+            <p><textarea rows="10" cols="60"
+                         name="<?= $data_overview; ?>"><?= $overview_val; ?></textarea>
+            </p>
+            <hr/>
+            <p class="submit">
+                <input type="submit" name="Submit"
+                       value="<?php _e('Sent request', 'mt_trans_domain') ?>"/>
+                <input type="reset"
+                       value="<?php _e('Reset', 'mt_trans_domain') ?>">
+            </p>
+        </form>
+    </div>
+    <div class="clear"></div>
+  <?php
+}
+
+new Cron();
 
 
 // Limiting the output characters for the the_excerpt();
@@ -386,3 +617,4 @@ function all_movies_func(array $atts)
 }
 
 add_shortcode('all_movies', 'all_movies_func');
+

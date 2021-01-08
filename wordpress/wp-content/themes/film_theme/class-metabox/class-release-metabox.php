@@ -15,15 +15,6 @@ class Release_Metabox extends Base_Meta
     $release = get_post_meta($post->ID, 'release', true);
 
     ?>
-    <p>
-      <label for="release-select"><?php _e('Select release of type') ?></label>
-      <select name="release" id="release-select">
-        <option value="high">       <?php _e('High') ?>     </option>
-        <option value="average">    <?php _e('Average') ?>  </option>
-        <option value="low">        <?php _e('Low') ?>      </option>
-      </select>
-    </p>
-    <hr>
     <label for="release"><?php _e('release') ?></label>
     <input type="text" name="release" id="release" value="<?= ucfirst($release); ?>" disabled>
     <?php
