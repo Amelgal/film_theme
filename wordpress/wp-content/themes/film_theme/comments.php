@@ -11,18 +11,18 @@
         ?>
         <h2 class="comments-title">
             <?php
-            $wp_course_comment_count = get_comments_number();
-            if ('1' === $wp_course_comment_count) {
+            $film_theme_comment_count = get_comments_number();
+            if ('1' === $film_theme_comment_count) {
                 printf(
                 /* translators: 1: title. */
-                    esc_html__('One thought on &ldquo;%1$s&rdquo;', 'wp_course'),
+                    esc_html__('One thought on &ldquo;%1$s&rdquo;', 'film_theme'),
                     '<span>' . wp_kses_post(get_the_title()) . '</span>'
                 );
             } else {
                 printf(
                 /* translators: 1: comment count number, 2: title. */
-                    esc_html(_nx('%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $wp_course_comment_count, 'comments title', 'wp_course')),
-                    number_format_i18n($wp_course_comment_count), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    esc_html(_nx('%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $film_theme_comment_count, 'comments title', 'film_theme')),
+                    number_format_i18n($film_theme_comment_count), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     '<span>' . wp_kses_post(get_the_title()) . '</span>'
                 );
             }
@@ -48,7 +48,7 @@
         // If comments are closed and there are comments, let's leave a little note, shall we?
         if (!comments_open()) :
             ?>
-            <p class="no-comments"><?php esc_html_e('Comments are closed.', 'wp_course'); ?></p>
+            <p class="no-comments"><?php esc_html_e('Comments are closed.', 'film_theme'); ?></p>
         <?php
         endif;
 

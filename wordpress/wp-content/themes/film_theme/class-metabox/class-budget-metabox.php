@@ -15,15 +15,6 @@ class Budget_Metabox extends Base_Meta
     $budget = get_post_meta($post->ID, 'budget', true);
 
     ?>
-    <p>
-      <label for="budget-select"><?php _e('Select budget') ?></label>
-      <select name="budget" id="genre-budget">
-        <option value="high">       <?php _e('High') ?>     </option>
-        <option value="average">    <?php _e('Average') ?>  </option>
-        <option value="low">        <?php _e('Low') ?>      </option>
-      </select>
-    </p>
-    <hr>
     <label for="budget"><?php _e('budget') ?></label>
     <input type="text" name="budget" id="budget" value="<?= ucfirst($budget); ?>" disabled>
     <?php

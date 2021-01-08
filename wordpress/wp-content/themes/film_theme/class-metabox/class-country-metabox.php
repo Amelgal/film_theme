@@ -15,15 +15,6 @@ class Country_Metabox extends Base_Meta
     $country = get_post_meta($post->ID, 'country', true);
 
     ?>
-    <p>
-      <label for="country-select"><?php _e('Select country of type') ?></label>
-      <select name="country" id="country-select">
-        <option value="high">       <?php _e('High') ?>     </option>
-        <option value="average">    <?php _e('Average') ?>  </option>
-        <option value="low">        <?php _e('Low') ?>      </option>
-      </select>
-    </p>
-    <hr>
     <label for="country"><?php _e('country') ?></label>
     <input type="text" name="country" id="country" value="<?= ucfirst($country); ?>" disabled>
     <?php

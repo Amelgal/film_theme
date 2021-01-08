@@ -15,15 +15,6 @@ class Revenue_Metabox extends Base_Meta
     $revenue = get_post_meta($post->ID, 'revenue', true);
 
     ?>
-    <p>
-      <label for="revenue-select"><?php _e('Select revenue of type') ?></label>
-      <select name="revenue" id="revenue-select">
-        <option value="high">       <?php _e('High') ?>     </option>
-        <option value="average">    <?php _e('Average') ?>  </option>
-        <option value="low">        <?php _e('Low') ?>      </option>
-      </select>
-    </p>
-    <hr>
     <label for="revenue"><?php _e('revenue') ?></label>
     <input type="text" name="revenue" id="revenue" value="<?= ucfirst($revenue); ?>" disabled>
     <?php

@@ -15,15 +15,6 @@ class Runtime_Metabox extends Base_Meta
     $runtime = get_post_meta($post->ID, 'runtime', true);
 
     ?>
-    <p>
-      <label for="runtime-select"><?php _e('Select runtime of type') ?></label>
-      <select name="runtime" id="runtime-select">
-        <option value="high">       <?php _e('High') ?>     </option>
-        <option value="average">    <?php _e('Average') ?>  </option>
-        <option value="low">        <?php _e('Low') ?>      </option>
-      </select>
-    </p>
-    <hr>
     <label for="runtime"><?php _e('revenue') ?></label>
     <input type="text" name="runtime" id="runtime" value="<?= ucfirst($runtime); ?>" disabled>
     <?php
