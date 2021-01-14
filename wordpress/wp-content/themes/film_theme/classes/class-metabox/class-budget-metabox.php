@@ -2,21 +2,19 @@
 
 namespace Metabox;
 
-require_once(DIR_PATH . '/core/class-base-meta-box.php');
 use Core\Base_Meta;
 
-class Poster_Metabox extends Base_Meta
+class Budget_Metabox extends Base_Meta
 {
-    private $key='poster_path';
 
   public function render($post)
   {
     // TODO: Implement render() method.
-    $poster_path = get_post_meta($post->ID, 'poster_path', true);
+    $budget = get_post_meta($post->ID, $this->key, true);
 
     ?>
-    <label for="poster_path"><?php _e('poster_path') ?></label>
-    <input type="text" name="poster_path" id="poster_path" value="<?= ucfirst($poster_path); ?>" disabled>
+      <label for="<?= _e($this->key)?>"><?= _e($this->key) ?></label>
+      <input type="text" name="<?= _e($this->key)?>" id="<?= _e($this->key)?>" value="<?= ucfirst($budget); ?>" disabled>
     <?php
   }
 

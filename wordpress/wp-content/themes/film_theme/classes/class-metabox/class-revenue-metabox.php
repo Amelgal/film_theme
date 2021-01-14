@@ -2,21 +2,18 @@
 
 namespace Metabox;
 
-require_once(DIR_PATH . '/core/class-base-meta-box.php');
 use Core\Base_Meta;
 
-class Genre_Metabox extends Base_Meta
+class Revenue_Metabox extends Base_Meta
 {
-  private $key='genre';
-
   public function render($post)
   {
     // TODO: Implement render() method.
-    $genre = get_post_meta($post->ID, 'genre', true);
+    $budget = get_post_meta($post->ID, $this->key, true);
 
     ?>
-    <label for="genre"><?php _e('budget') ?></label>
-    <input type="text" name="genre" id="genre" value="<?= ucfirst($genre); ?>" disabled>
+      <label for="<?= _e($this->key)?>"><?= _e($this->key) ?></label>
+      <input type="text" name="<?= _e($this->key)?>" id="<?= _e($this->key)?>" value="<?= ucfirst($budget); ?>" disabled>
     <?php
   }
 
