@@ -10,12 +10,13 @@ abstract class Base_Meta {
   protected $context;
   protected $priority;
   protected $callback_args;
+  protected $key;
 
   abstract public function save($postID);
 
   abstract public function render($post);
 
-  public function __construct($id,$title,$screen,$context='advanced',$priority='default',$callback_args=null)
+  public function __construct($key,$id,$title,$screen,$context='advanced',$priority='default',$callback_args=null)
   {
     $this->id=$id;
     $this->title=$title;
@@ -23,6 +24,7 @@ abstract class Base_Meta {
     $this->context=$context;
     $this->priority=$priority;
     $this->callback_args=$callback_args;
+    $this->key=$key;
 
     add_action('add_meta_boxes',array($this,'init'));
     add_action('save_post',array($this,'save'));

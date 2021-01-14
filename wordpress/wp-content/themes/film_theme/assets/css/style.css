@@ -67,7 +67,7 @@ p{
 }
 
 .header_logo img{
-	width: 100%;
+	width: 70%;
 	margin-left: 25px;
 }
 .header_content{
@@ -148,6 +148,15 @@ html, body, div{
 	border-top: 1px solid #e6e6e8;
 	border-bottom: 1px solid #e6e6e8;
 	text-align: center;
+}
+
+.header-menu {
+	padding: 35px 0;
+}
+.space-between{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
 }
 
 .menu-primary li a {

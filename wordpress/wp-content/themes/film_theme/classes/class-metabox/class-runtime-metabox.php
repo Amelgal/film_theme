@@ -2,22 +2,18 @@
 
 namespace Metabox;
 
-require_once(DIR_PATH . '/core/class-base-meta-box.php');
 use Core\Base_Meta;
 
-class Overview_Metabox extends Base_Meta
+class Runtime_Metabox extends Base_Meta
 {
-  private $key='overview';
-
   public function render($post)
   {
     // TODO: Implement render() method.
-    $overview = get_post_meta($post->ID, 'overview', true);
+    $budget = get_post_meta($post->ID, $this->key, true);
 
     ?>
-
-    <label for="overview"><?php _e('overview') ?></label>
-    <input type="text" name="overview" id="overview" value="<?= ucfirst($overview); ?>" disabled>
+      <label for="<?= _e($this->key)?>"><?= _e($this->key) ?></label>
+      <input type="text" name="<?= _e($this->key)?>" id="<?= _e($this->key)?>" value="<?= ucfirst($budget); ?>" disabled>
     <?php
   }
 

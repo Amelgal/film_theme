@@ -2,21 +2,19 @@
 
 namespace Metabox;
 
-require_once(DIR_PATH . '/core/class-base-meta-box.php');
 use Core\Base_Meta;
 
-class Runtime_Metabox extends Base_Meta
+class Genre_Metabox extends Base_Meta
 {
-  private $key='runtime';
 
   public function render($post)
   {
     // TODO: Implement render() method.
-    $runtime = get_post_meta($post->ID, 'runtime', true);
+    $budget = get_post_meta($post->ID, $this->key, true);
 
     ?>
-    <label for="runtime"><?php _e('revenue') ?></label>
-    <input type="text" name="runtime" id="runtime" value="<?= ucfirst($runtime); ?>" disabled>
+      <label for="<?= _e($this->key)?>"><?= _e($this->key) ?></label>
+      <input type="text" name="<?= _e($this->key)?>" id="<?= _e($this->key)?>" value="<?= ucfirst($budget); ?>" disabled>
     <?php
   }
 
@@ -31,5 +29,6 @@ class Runtime_Metabox extends Base_Meta
       );
     }
   }
+
 
 }
