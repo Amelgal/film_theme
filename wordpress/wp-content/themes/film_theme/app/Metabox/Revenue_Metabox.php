@@ -1,12 +1,11 @@
 <?php
 
-namespace Metabox;
+namespace Cactus\Metabox;
 
-use Core\Base_Meta;
+use Cactus\Core\Base_Meta;
 
-class Genre_Metabox extends Base_Meta
+class Revenue_Metabox extends Base_Meta
 {
-
   public function render($post)
   {
     // TODO: Implement render() method.
@@ -29,6 +28,5 @@ class Genre_Metabox extends Base_Meta
       );
     }
   }
-
 
 }

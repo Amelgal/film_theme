@@ -1,10 +1,10 @@
 <?php
 
-namespace Metabox;
+namespace Cactus\Metabox;
 
-use Core\Base_Meta;
+use Cactus\Core\Base_Meta;
 
-class Revenue_Metabox extends Base_Meta
+class Release_Metabox extends Base_Meta
 {
   public function render($post)
   {

@@ -1,14 +1,17 @@
 <?php
 
-namespace Cron;
+namespace Cactus\Cron;
 
-use Core\Base_Cron;
+use Cactus\Core\Base_Cron;
 
-class Upload_Bd extends Base_Cron{
+class Upload_Db extends Base_Cron{
+
+  protected $name = 'daily_event';
 
   public function init() {
 
     ini_set('max_execution_time', 600);
+
     $param = (require(DIR_PATH . 'config/genres_config.php'));
 
     for ($i = 1; $i <= 20; $i++) {

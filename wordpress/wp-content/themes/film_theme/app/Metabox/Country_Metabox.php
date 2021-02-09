@@ -1,10 +1,10 @@
 <?php
 
-namespace Metabox;
+namespace Cactus\Metabox;
 
-use Core\Base_Meta;
+use Cactus\Core\Base_Meta;
 
-class Original_Title_Metabox extends Base_Meta
+class Country_Metabox extends Base_Meta
 {
   public function render($post)
   {
@@ -28,5 +28,6 @@ class Original_Title_Metabox extends Base_Meta
       );
     }
   }
+
 
 }

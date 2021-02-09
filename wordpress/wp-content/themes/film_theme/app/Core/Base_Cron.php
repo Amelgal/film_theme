@@ -1,18 +1,15 @@
 <?php
 
-namespace Core;
+namespace Cactus\Core;
 
 abstract class Base_Cron {
 
   protected $name;
-  protected $period;
+  protected $period='daily';
 
   abstract public function init();
 
-  public function __construct($name,$period='daily') {
-    $this->name=$name;
-    $this->period=$period;
-
+  public function __construct() {
     add_action('admin_head', [$this, 'register']);
     add_action($this->name, [$this, 'init']);
   }

@@ -6,7 +6,7 @@
                 <div class="posts">
                     <h2>Все фильмы</h2>
                   <?php
-                  do_shortcode('[all_movies numberposts = 15 post_type = film]');
+                  do_shortcode('[all_movies numberposts = 9 post_type = film]');
                   ?>
                 </div>
             </div>

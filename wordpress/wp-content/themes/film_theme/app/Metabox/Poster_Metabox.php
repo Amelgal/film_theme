@@ -1,8 +1,8 @@
 <?php
 
-namespace Metabox;
+namespace Cactus\Metabox;
 
-use Core\Base_Meta;
+use Cactus\Core\Base_Meta;
 
 class Poster_Metabox extends Base_Meta {
 
