@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Cactus\Core;
 
 abstract class Base_Meta {
 

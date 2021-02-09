@@ -1,11 +1,12 @@
 <?php
 
-namespace Metabox;
+namespace Cactus\Metabox;
 
-use Core\Base_Meta;
+use Cactus\Core\Base_Meta;
 
-class Overview_Metabox extends Base_Meta
+class Budget_Metabox extends Base_Meta
 {
+
   public function render($post)
   {
     // TODO: Implement render() method.
